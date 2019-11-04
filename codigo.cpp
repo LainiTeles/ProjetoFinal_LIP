@@ -17,6 +17,7 @@ struct Imagem{
 };
 
 int main(){
+    fstream arquivo;
     char opcao;
 
     cout << "###### MENU ######\n";
