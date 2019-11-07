@@ -68,6 +68,7 @@ bool abre_img(char nome[], Imagem& img){
         return false;
     }
     else{
+        //LÊ DADOS DO ARQUIVO.
         arq >> validacao;
         arq >> img.altura;
         arq >> img.largura;
@@ -77,7 +78,7 @@ bool abre_img(char nome[], Imagem& img){
            return false;
     }
     else{
-        //RECEBE A MATRIZ DE DADOS DA IMAGEM.
+        //LÊ A MATRIZ DE DADOS DA IMAGEM.
         for(int i = 0; i<img.altura; i++){
             for(int j = 0; j<img.largura; j++){
                 for(int k = 0; k<3; k++){
