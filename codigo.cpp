@@ -106,11 +106,11 @@ void converte_para_cinza(Imagem img, Imagem& img_out){
             }
             media /= 3;
 
-            //IMAGEM RESULTADO RECEBE VALOR DA MEDIA.
-            img_out.matriz[0][j][i] = media;
-            img_out.matriz[1][j][i] = media;
-            img_out.matriz[2][j][i] = media;
-
+            for(int k=0; k<3; k++){
+                //IMAGEM RESULTADO RECEBE VALOR DA MEDIA.
+                img_out.matriz[k][j][i] = media;
+            }
+            media = 0.0;
         }
     }
 }
@@ -123,6 +123,7 @@ void salva_img(char nome_out[], Imagem img_out){
         arq_out << "P3" << endl;
         arq_out << img_out.altura << " ";
         arq_out << img_out.largura << endl; //IMPRIME NO AQUIRVO DE SAÍDA OS DADOS DA IMAGEM RESULTANTE.
+        arq_out << 255 << endl;
 
         for(int i=0; i<img_out.altura; i++){
             for(int j=0; j<img_out.largura; j++){
@@ -134,6 +135,7 @@ void salva_img(char nome_out[], Imagem img_out){
         arq_out << endl;
         }
     }
-
-arq_out.close(); //FECHAR ARQUIVO COM IMAGEM RESULTANTE.
+    
+    cout << "Imagem salva em: " << nome_out << endl;
+    arq_out.close(); //FECHAR ARQUIVO COM IMAGEM RESULTANTE.
 }
