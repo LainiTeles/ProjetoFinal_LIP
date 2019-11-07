@@ -1,84 +1,138 @@
 #include <iostream>
+#include <cstring>
+#include <fstream>
+#include <cstdlib>
 using namespace std;
 
 const int MAX = 600;
 const int SMAX = 100;
 
-struct RGB{
-    int vermelho;
-    int verde;
-    int azul;
-};
-
+//TIPO ESTRUTURADO
 struct Imagem{
     int largura;
     int altura;
-    RGB image[3][MAX][MAX];
+    int matriz[3][MAX][MAX];
 };
 
+//FUNÇÕES
+bool abre_img(char nome[], Imagem& img);
+void converte_para_cinza(Imagem img, Imagem& img_out);
+void salva_img(char nome_out[], Imagem img_out);
+
+//FUNÇÃO PRINCIPAL
 int main(){
-    fstream arquivo;
+    Imagem img;
+    Imagem img_out;
     char opcao;
+    char nome_out[] = "arq_out.ppm";
 
-    cout << "###### MENU ######\n";
-    cout << "# Selecione a edicao desejada: \n";
-    cout << "  1 -> Funcao Verde\n";
-    cout << "  2 -> Funcao Amarela\n";
-    cout << "  3 -> Funcao Azul\n";
-    cout << "  4 -> Funcao vermelha\n";
-    cout << "  S -> Funcao Sair\n";
+    char nome[SMAX];
+    cout << "Insira nome do arquivo imagem:\n";
+    cin >> nome;
 
-    cin >> opcao;
+    if(abre_img(nome,img)){ //VERIFICA SE O ARQUIV FOI ABERTO E RECEBEU OS DADOS DA IMAGEM .
 
-    switch(opcao){
-        case '1':
-            cout << "Insira nome do arquivo imagem:\n";
-            //cin >> arq;
-            /*if( @ == "p3"){
-                if( @ <= 512 && @ <= 512){
-                    funcao verde();
-                }
-            }*/
+        cout << "###### MENU ######\n";
+        cout << "# Selecione a edicao desejada:\n";
+        cout << "  1 -> Escala de Cinza\n";
 
-            break;
+        cin >> opcao;
 
-        case '2':
-            cout << "Insira nome do arquivo imagem:\n";
-            //cin >> arq;
-            /*if( @ == "p3"){
-                if( @ <= 512 && @ <= 512){
-                    funcao amarela();
-                }
-            }*/
-            break;
+        switch(opcao){
+            case '1':
+                converte_para_cinza(img,img_out);
 
-        case '3':
-            cout << "Insira nome do arquivo imagem:\n";
-            //cin >> arq;
-            /*if( @ == "p3"){
-                if( @ <= 512 && @ <= 512){
-                    funcao azul();
-                }
-            }*/
-            break;
+                salva_img(nome_out,img_out);
 
-        case '4':
-            cout << "Insira nome do arquivo imagem:\n";
-            //cin >> arq;
-            /*if( @ == "p3"){
-                if( @ <= 512 && @ <= 512){
-                    funcao verde();
-                }
-            }*/
-            break;
+                break;
 
-        case 'S':
-            //funcao sair();
-            break;
-
-        default:
-            cout << "Opcao invalida";
+            default:
+                cout << "Opcao invalida, tente novamente." << endl;
+        }
+    }
+    else{
+        cout << "Arquivo invalido, tente novamente." << endl;
     }
 
 return 0;
+}
+
+bool abre_img(char nome[], Imagem& img){
+    fstream arq;
+    char tipo[] = "P3";
+    char validacao[SMAX];
+
+    arq.open(nome);
+
+    if(!arq.is_open()){ //VERIFICA SE ABRIU CORRETAMENTE.
+        return false;
+    }
+    else{
+        arq >> validacao;
+        arq >> img.altura;
+        arq >> img.largura;
+
+    }
+    if(img.altura > 512 || img.largura > 512 || strcmp(validacao,tipo)!=0 ){ //VERIFICA SE O ARQUIVO É VALIDO.
+           return false;
+    }
+    else{
+        //RECEBE A MATRIZ DE DADOS DA IMAGEM.
+        for(int i = 0; i<img.altura; i++){
+            for(int j = 0; j<img.largura; j++){
+                for(int k = 0; k<3; k++){
+                    arq >> img.matriz[k][j][i];
+                }
+            }
+        }
+    }
+
+arq.close(); //FECHA ARQUIVO COM IMAGEM ORIGEM.
+return true;
+}
+
+void converte_para_cinza(Imagem img, Imagem& img_out){
+    float media = 0.0;
+
+    //IMAGEM RESULTANTE RECEBE OS CAMPOS DA IMAGEM ORIGINAL.
+    img_out = img;
+
+    for(int i = 0; i<img.altura; i++){
+        for(int j = 0; j<img.largura; j++){
+            for(int k = 0; k<3; k++){
+                media += img.matriz[k][j][i];
+
+            }
+            media /= 3;
+
+            //IMAGEM RESULTADO RECEBE VALOR DA MEDIA.
+            img_out.matriz[0][j][i] = media;
+            img_out.matriz[1][j][i] = media;
+            img_out.matriz[2][j][i] = media;
+
+        }
+    }
+}
+void salva_img(char nome_out[], Imagem img_out){
+    ofstream arq_out;
+    arq_out.open(nome_out);
+
+    if(arq_out.is_open()){ //VERIFICA SE ABRIU CORRETAMENTE.
+
+        arq_out << "P3" << endl;
+        arq_out << img_out.altura << " ";
+        arq_out << img_out.largura << endl; //IMPRIME NO AQUIRVO DE SAÍDA OS DADOS DA IMAGEM RESULTANTE.
+
+        for(int i=0; i<img_out.altura; i++){
+            for(int j=0; j<img_out.largura; j++){
+                for(int k=0; k<3; k++){
+                    arq_out << img_out.matriz[k][j][i];
+                }
+            }
+
+        arq_out << endl;
+        }
+    }
+
+arq_out.close(); //FECHAR ARQUIVO COM IMAGEM RESULTANTE.
 }
