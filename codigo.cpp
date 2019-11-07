@@ -128,7 +128,7 @@ void salva_img(char nome_out[], Imagem img_out){
         for(int i=0; i<img_out.altura; i++){
             for(int j=0; j<img_out.largura; j++){
                 for(int k=0; k<3; k++){
-                    arq_out << img_out.matriz[k][j][i];
+                    arq_out << img_out.matriz[k][j][i] << " ";
                 }
             }
 
