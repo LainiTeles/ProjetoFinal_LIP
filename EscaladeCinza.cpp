@@ -12,11 +12,11 @@ void converte_para_cinza(Imagem img, Imagem& img_out){
             }
             media /= 3;
 
-            //IMAGEM RESULTADO RECEBE VALOR DA MEDIA.
-            img_out.matriz[0][j][i] = media;
-            img_out.matriz[1][j][i] = media;
-            img_out.matriz[2][j][i] = media;
-
+            for(int k=0; k<3; k++){
+                //IMAGEM RESULTADO RECEBE VALOR DA MEDIA.
+                img_out.matriz[k][j][i] = media;
+            }
+            media = 0.0;
         }
     }
 }
