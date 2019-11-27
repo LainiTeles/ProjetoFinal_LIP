@@ -38,7 +38,7 @@ int main(){
     cin >> nome;
     cout << endl;
 
-do{
+do{ //LAÇO INFINITO DO MENU.
 
     if(abre_img(nome,img)){ //VERIFICA SE O ARQUIVO FOI ABERTO E RECEBEU OS DADOS DA IMAGEM .
 
@@ -118,13 +118,13 @@ do{
         }
     }
     else{
-        cout << "Arquivo invalido, tente novamente inserindo o nemo de um arquivo imagem valido: " << endl;
+        cout << "Arquivo invalido, tente novamente inserindo o nome de um arquivo imagem valido: " << endl;
         cin >> nome;
         cout << endl;
 
     }
 
-}while(opcao != '8');
+}while(opcao != '8'); //CONDICAO DO LACO DO MENU.
 
 return 0;
 }
@@ -190,8 +190,9 @@ void converte_para_cinza(Imagem img, Imagem& img_out){
 }
 
 void rotaciona(Imagem img, Imagem& img_out){
+  
     img_out.largura = img.altura;
-    img_out.altura = img.largura;
+    img_out.altura = img.largura; //IMAGEM RESULTADO RECEBE DIMENSOES.
 
     for(int i=0; i<img_out.altura; i++){
         for(int j=0; j<img_out.largura; j++){
@@ -205,12 +206,13 @@ void rotaciona(Imagem img, Imagem& img_out){
 void erosao(Imagem img, Imagem& img_out){
 
     img_out.largura = img.largura;
-    img_out.altura = img.altura;
+    img_out.altura = img.altura; // IMAGEM RESULTENTE RECEBE A DIMENSAO.
 
     for(int i = 0; i < img.altura; i++){
         for(int j = 0; j < img.largura; j++){
             for(int k = 0; k < 3; k++){
                 if((img.matriz[k][j][i] + img.matriz[k][j][i+1] + img.matriz[k][j+1][i] + img.matriz[k][j+1][i+1]) == 4*255){
+                    //VERIFICA SE OS VALORES DOS PIXELS ONDE ESTA LOCALIZADA A MATRIZ FILTRO É IGUAL A 255.
                     img_out.matriz[k][j][i] = 255;
                 }
                 else{
@@ -231,7 +233,7 @@ void histograma(Imagem img, Imagem& img_out){
         for(int j = 0; j < 3; j++){
             cont[i][j] = 0;
         }
-    }
+    } //ZERA O VETOR CONTADOR, SEM LIXO DE MEMORIA.
 
     for(int i = 0; i < img.altura; i++){
         for(int j = 0; j < img.largura; j++){
@@ -239,15 +241,16 @@ void histograma(Imagem img, Imagem& img_out){
                 cont[img.matriz[k][j][i]][k] ++;
             }
         }
-    }
+    } //IMPLEMENTÇÃO DO VETOR CONTADOR.
 
     for(int i = 0; i < img.altura; i++){
         for(int j = 0; j < img.largura; j++){
             for(int k = 0; k < 3; k++){
                 for(int l = 0; l <= img.matriz[k][j][i]; l++){
-                    somatorio+=cont[l][k];
-                }
-                img_out.matriz[k][j][i] = somatorio*255/(img.altura*img.largura);
+                    somatorio+=cont[l][k]; //SOMATORIO ATE IM DADO PIXEL.
+                } 
+                img_out.matriz[k][j][i] = somatorio*255/(img.altura*img.largura); 
+                //DADO PIXEL RECEBE RESULTADO DA OPERAÇÃO DE EQUALIZAÇÃO.
                 somatorio = 0;
             }
         }
@@ -257,7 +260,7 @@ void histograma(Imagem img, Imagem& img_out){
 void binariza(Imagem img, Imagem& img_out, int limiar){
     int i, j, k;
 
-    converte_para_cinza(img, img_out);
+    converte_para_cinza(img, img_out); // TODAS AS CORES POSSUEM O MESMO VALOR.
 
     for(i=0; i<img.altura; i++){
         for(j=0; j<img.largura; j++){
@@ -285,6 +288,7 @@ Imagem transposta (Imagem img){
         for(j=0; j<img_trans.largura; j++){
             for(k=0; k<3; k++){
                 img_trans.matriz[k][j][i] = img.matriz[k][i][j];
+                //A TRANSPOSTA RECEBE O PIXEL INVERSO EM NUMERO DE LINHA E COLUNA.
             }
         }
     }
